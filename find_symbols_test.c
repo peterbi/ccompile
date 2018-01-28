@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
+#include <stdlib.h>
 
 /*
  * Use this file for writing tests for your two functions.
@@ -44,7 +45,7 @@ int main() {
    * The third argument is the correct number of parameters in the input line
    * Arguments after that are the correct names of the parameters in the order in which they appear
    */
-  test_parse_function_header("int fun ( int dog , int cat ) {", "fun", 2, "dog", "cat");
+  test_parse_function_header("int fun ( int dog , int cat , int curly ) {", "fun", 3, "dog", "cat", "curly");
 
 
   printf("Calling parse_line with input \"int c , e = b ;\"\n");
@@ -54,7 +55,13 @@ int main() {
    * The second argument is the correct number of variables being declared in the input line
    * Arguments after that are the correct names of the variables in the order in which they are being declared
    */
-  test_parse_line("int c , e = b ;", 2, "c", "e");
+  test_parse_line("int c , e = b , d , x = y + z ;", 4, "c", "e", "d", "x");
+
+  /*if(function_name!=NULL) free(function_name);
+  for(int i = 0; i<10; i++){
+	  if(parameter_names[i]!=NULL) free(parameter_names[i]);
+	  if(variable_names[i]!=NULL) free(variable_names[i]);
+  }*/
 
   return 0;
 
@@ -78,6 +85,7 @@ void test_parse_function_header(char* input, char* function_name, int num_params
       check_parameter(i, param_name);
     }
   }
+  //if(function_name!=NULL) free(function_name);
 }
 
 void test_parse_line(char* input, int num_vars, ...) { 
