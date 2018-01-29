@@ -38,6 +38,7 @@ void check_variable(int, char*);
 int main() {
 
   printf("Calling parse_function_header with input \"int fun ( int dog , int cat ) {\"\n");
+  printf("Calling parse_function_header with input \"int fun ( int 2dog , int cat ) {\"\n");
   /*
    * Here's an example of a test for parse_function_header
    * The first argument is the input to the parse_function_header function
@@ -46,16 +47,28 @@ int main() {
    * Arguments after that are the correct names of the parameters in the order in which they appear
    */
   test_parse_function_header("int fun ( int dog , int cat , int curly ) {", "fun", 3, "dog", "cat", "curly");
+  test_parse_function_header("int fun ( int int , int cat , int curly ) {", "fun", 3, "dog", "cat", "curly");
+  test_parse_function_header("cat fun ( int 2dog , int cat , int curly ) {", "fun", 3, "dog", "cat", "curly");
+  test_parse_function_header("int fun ( dog , int cat , ) {", "fun", 3, "dog", "cat", "curly");
+  test_parse_function_header("int fun ( int 2dog , int cat , int curly ) {", "fun", 3, "dog", "cat", "curly");
 
-
-  printf("Calling parse_line with input \"int c , e = b ;\"\n");
+  printf("Calling parse_line with input \"int c , e = b , d , x = y + z ;\"\n");
   /*
    * Here's an example of a test for parse_line
    * The first argument is the input to the parse_line function
    * The second argument is the correct number of variables being declared in the input line
    * Arguments after that are the correct names of the variables in the order in which they are being declared
    */
-  test_parse_line("int c , e = b , d , x = y + z ;", 4, "c", "e", "d", "x");
+  test_parse_line("int 2c , e = b , d , x = y + z , w ;", 5, "c", "e", "d", "x", "w");
+  test_parse_line("int j k , e = b , d , x = y + z , w ;", 5, "c", "e", "d", "x", "w");
+  test_parse_line("int c = , e = , d , x = y + z , w ;", 5, "c", "e", "d", "x", "w");
+  test_parse_line("int c , e = b 5 , d , x = y + z , w ;", 5, "c", "e", "d", "x", "w");
+  test_parse_line("int c , e = b + , d , x = y + z , w ;", 5, "c", "e", "d", "x", "w");
+
+  char test[10];
+  strcpy(test, "+5+");
+  char * t = strtok(test, "+");
+  printf("%s\n", t);
 
   /*if(function_name!=NULL) free(function_name);
   for(int i = 0; i<10; i++){
